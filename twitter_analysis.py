@@ -2,9 +2,8 @@ import json
 import pandas as pd
 import matplotlib.pyplot as plt
 import re
-
 #read in the data from the txt file
-tweets_data_path = '../Desktop/twiiter_data.txt'
+tweets_data_path = './twitter_data.txt'
 
 tweets_data = []
 tweet_file = open(tweets_data_path, 'r')
@@ -53,21 +52,27 @@ tweets['python'] = tweets['text'].apply(lambda tweet: word_in_text('python', twe
 
 #prints number of tweets with these key words by counting the number of True values
 print ("Number of tweets that mention Python " + str(tweets['python'].value_counts()[True]))
-print ("Number of tweets that mention Javascript " + str(tweets['javascript'].value_counts()[True]))
-print ("Number of tweets that mention Ruby " + str(tweets['ruby'].value_counts()[True]))
+#print ("Number of tweets that mention Javascript " + str(tweets['javascript'].value_counts()[True]))
+#print ("Number of tweets that mention Ruby " + str(tweets['ruby'].value_counts()[True]))
 
 
 #Reformatting created_at column
-tweets['created_at'] = tweets['created_at'].map(lambda x: str(x)[:-20])
+tweets['created_at'] = tweets['created_at'].map(lambda x: str(x)[7:-20])
+tweets['created_at'] =tweets['created_at'].astype('int64')
+
+#Group Tweets by day
 
 
-#Seperate Df that has created_at as index, and keywords (python, javascript, ruby as column values)
-tweets.set_index('created_at', inplace = True)
-#print(tweets.head())
-groupedTweets = tweets.groupby('created_at')
-groupedTweets['total'] = groupedTweets['python'].value_counts()[True]
-print(groupedTweets.head())
+#Sum amount of mentions by group
+tweets['total'] = tweets['python'].value_counts()[True]
 
+
+
+#Seperate Df that has created_at as index, and keywords (python column values)
+#tweets.set_index('created_at', inplace = True)
 
 
 #create scatter plot of keyword over time
+"""tweets.plot(kind = 'scatter', x = 'created_at', y ='total')
+plt.title("Number of mentions of the word 'Python'")
+plt.savefig('foo.png')"""
