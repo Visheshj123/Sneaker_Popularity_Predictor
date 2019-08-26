@@ -66,6 +66,19 @@ tweets['created_at'] =tweets['created_at'].astype('int64')
 #Sum amount of mentions by group
 tweets['total'] = tweets['python'].value_counts()[True]
 
+#delete tuples that have 'false' in python column
+indexnames = tweets[tweets['python'] == False].index
+tweets.drop(indexnames, inplace=True)
+
+
+tweets.drop(['text', 'lang'], axis=1, inplace=True)
+tweets.drop_duplicates(keep = 'first', inplace=True)
+
+#sets Python at index value
+tweets.set_index('python', inplace=True)
+
+print(tweets.head())
+
 
 
 #Seperate Df that has created_at as index, and keywords (python column values)
