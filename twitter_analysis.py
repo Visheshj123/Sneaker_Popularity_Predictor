@@ -45,13 +45,11 @@ def word_in_text(word, text):
             return True
         return False
 
-#runs lambda function that takes in tweet['text'] amd ouputs true into new column
-tweets['python'] = tweets['text'].apply(lambda tweet: word_in_text('python', tweet))
-#tweets['javascript'] = tweets['text'].apply(lambda tweet: word_in_text('javascript', tweet))
-#tweets['ruby'] = tweets['text'].apply(lambda tweet: word_in_text('ruby', tweet))
+#runs lambda function that takes in tweet['text'] amd ouputs true into new column if word is found in a tweet
+tweets['nike'] = tweets['text'].apply(lambda tweet: word_in_text('nike', tweet))
 
 #prints number of tweets with these key words by counting the number of True values
-print ("Number of tweets that mention Python " + str(tweets['python'].value_counts()[True]))
+print ("Number of tweets that mention Python " + str(tweets['nike'].value_counts()[True]))
 #print ("Number of tweets that mention Javascript " + str(tweets['javascript'].value_counts()[True]))
 #print ("Number of tweets that mention Ruby " + str(tweets['ruby'].value_counts()[True]))
 
@@ -60,22 +58,14 @@ print ("Number of tweets that mention Python " + str(tweets['python'].value_coun
 tweets['created_at'] = tweets['created_at'].map(lambda x: str(x)[7:-20])
 tweets['created_at'] =tweets['created_at'].astype('int64')
 
-#Group Tweets by day
-
-
-#Sum amount of mentions by group
-tweets['total'] = tweets['python'].value_counts()[True]
-
 #delete tuples that have 'false' in python column
-indexnames = tweets[tweets['python'] == False].index
+indexnames = tweets[tweets['nike'] == False].index
 tweets.drop(indexnames, inplace=True)
 
+#finds the number of True values for each day and puts it into Dataframe
+tweets.set_index('created_at', inplace=True)
+tweets = tweets.groupby(['created_at']).sum()
 
-tweets.drop(['text', 'lang'], axis=1, inplace=True)
-tweets.drop_duplicates(keep = 'first', inplace=True)
-
-#sets Python at index value
-tweets.set_index('python', inplace=True)
 
 print(tweets.head())
 
@@ -84,8 +74,10 @@ print(tweets.head())
 #Seperate Df that has created_at as index, and keywords (python column values)
 #tweets.set_index('created_at', inplace = True)
 
-
+def create_graph():
 #create scatter plot of keyword over time
-"""tweets.plot(kind = 'scatter', x = 'created_at', y ='total')
-plt.title("Number of mentions of the word 'Python'")
-plt.savefig('foo.png')"""
+    tweets.plot(kind = 'bar')
+    plt.title("Number of mentions of the word 'Nike'")
+    plt.ylabel('Number of tweets')
+    plt.xlabel('Days')
+    plt.savefig('foo.png')

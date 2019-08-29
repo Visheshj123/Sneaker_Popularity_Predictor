@@ -18,7 +18,9 @@ class StdOutListener(StreamListener):
     def en_error(self, status):
         print(status)
 
-if __name__ == '__main__':
+#if __name__ == '__main__':
+
+def stream_data():
     #Handles twitter authetification and the connection to Twitter Streaming API
     l = StdOutListener()
     auth = OAuthHandler(consumer_key, consumer_secret)
@@ -26,4 +28,4 @@ if __name__ == '__main__':
     stream = Stream(auth, l)
 
     #Filters Twitter Streams to capture data by the keywords: 'python', 'javascript', 'ruby'
-    stream.filter(track=['python'])
+    stream.filter(track=['nike'])
