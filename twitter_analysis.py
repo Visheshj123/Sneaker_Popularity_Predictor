@@ -45,7 +45,7 @@ def word_in_text(word, text):
             return True
         return False
 
-#runs lambda function that takes in tweet['text'] amd ouputs true into new column if word is found in a tweet
+#runs lambda function that takes in tweet['text'] amd outputs true into new column if word is found in a tweet
 tweets['nike'] = tweets['text'].apply(lambda tweet: word_in_text('nike', tweet))
 
 #prints number of tweets with these key words by counting the number of True values
@@ -54,27 +54,55 @@ print ("Number of tweets that mention Python " + str(tweets['nike'].value_counts
 #print ("Number of tweets that mention Ruby " + str(tweets['ruby'].value_counts()[True]))
 
 
-#Reformatting created_at column
-tweets['created_at'] = tweets['created_at'].map(lambda x: str(x)[7:-20])
-tweets['created_at'] =tweets['created_at'].astype('int64')
+#reformatting  from String to print
+tweets['month'] = tweets['created_at'].map(lambda x: str(x)[4:7])
+tweets['day'] = tweets['created_at'].map(lambda x: str(x)[8:10])
+tweets['time'] = tweets['created_at'].map(lambda x: str(x)[11:16])
 
-#delete tuples that have 'false' in python column
+
+
+#converting month from string to int
+months_map = {'Aug': 8, 'Sept': 9, 'Oct': 10, 'Dec': 11}
+def mapper(month):
+    return months_map[month]
+tweets['month'] = tweets['month'].apply(lambda x: mapper(x))
+
+
+#converts month, day, time to type prints
+tweets['month'] =tweets['month'].astype('int64')
+tweets['day'] =tweets['day'].astype('int64')
+#drops ':' from time
+tweets['time'] = tweets['time'].replace({':':''}, regex=True)
+tweets['time'] =tweets['time'].astype('int64')
+tweets.drop(['created_at'], axis=1, inplace=True)
+tweets.drop(['text'], axis=1, inplace=True)
+
+
+
+
+
+#delete tuples that have 'false' in keyword column
 indexnames = tweets[tweets['nike'] == False].index
 tweets.drop(indexnames, inplace=True)
 
-#finds the number of True values for each day and puts it into Dataframe
-tweets.set_index('created_at', inplace=True)
-tweets = tweets.groupby(['created_at']).sum()
 
+#finds the number of True values for each hour of a day of a specific month and puts it into Dataframe
+#tweets.set_index('month', inplace=True)
+#tweets = tweets.groupby(['day']).sum()
 
-print(tweets.head())
+#TODO: create function that takes month and day, create graph hour-by-hour
+print(tweets.loc[lambda df: df['month'] == 8])
 
 
 
 #Seperate Df that has created_at as index, and keywords (python column values)
 #tweets.set_index('created_at', inplace = True)
+"""
+def create_graph(month, day):
+    #Obtain data from user's desired month and day
+    print(tweets.loc[lambda df: df['month'] == 8])
 
-def create_graph():
+
 #create scatter plot of keyword over time
     tweets.plot(kind = 'bar')
     plt.title("Number of mentions of the word 'Nike'")
@@ -83,7 +111,7 @@ def create_graph():
     plt.savefig('foo.png')
 
 
-"""
+
 
 plt.figure(figsize=(8,5))
 x_data, y_data = (df["Year"].values, df["Value"].values)
