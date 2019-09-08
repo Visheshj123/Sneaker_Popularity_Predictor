@@ -96,18 +96,26 @@ df = pd.DataFrame()
 df = tweets.loc[lambda df: df['month'] == 8]
 df = df.loc[lambda df: df['day'] == 27]
 #counts number of repeat instances every minute
-df_count = df['time'].value_counts()
-#TODO: name the columns 
+df_count = pd.DataFrame()
+df_count['count'] = df['time'].value_counts()
+df_count.index.name = 'time'
+#df_count.rename( columns={'' :'count'}, inplace=True )
 print(df_count.head())
 
 
 
 
+df_count.plot(kind = 'bar')
+plt.savefig('foo.png')
+
+
+
 """
+
 plt.figure(figsize=(8,5))
-x_data, y_data = (df["time"].values, df["Value"].values)
+x_data, y_data = (df_count.time.values, df_count["count"].values)
 plt.plot(x_data, y_data, 'ro')
-plt.ylabel('GDP')
+plt.ylabel('count')
 plt.xlabel('time')
 plt.savefig('foo.png')
 
