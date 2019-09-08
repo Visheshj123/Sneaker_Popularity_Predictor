@@ -2,6 +2,7 @@ import json
 import pandas as pd
 import matplotlib.pyplot as plt
 import re
+import numpy as np
 #read in the data from the txt file
 tweets_data_path = './twitter_data.txt'
 
@@ -90,14 +91,31 @@ tweets.drop(indexnames, inplace=True)
 #tweets.set_index('month', inplace=True)
 #tweets = tweets.groupby(['day']).sum()
 
-#TODO: create function that takes month and day, create graph hour-by-hour
-print(tweets.loc[lambda df: df['month'] == 8])
+#Takes desired month and day from user
+df = pd.DataFrame()
+df = tweets.loc[lambda df: df['month'] == 8]
+df = df.loc[lambda df: df['day'] == 27]
+#counts number of repeat instances every minute
+df_count = df['time'].value_counts()
+#TODO: name the columns 
+print(df_count.head())
+
+
+
+
+"""
+plt.figure(figsize=(8,5))
+x_data, y_data = (df["time"].values, df["Value"].values)
+plt.plot(x_data, y_data, 'ro')
+plt.ylabel('GDP')
+plt.xlabel('time')
+plt.savefig('foo.png')
 
 
 
 #Seperate Df that has created_at as index, and keywords (python column values)
 #tweets.set_index('created_at', inplace = True)
-"""
+
 def create_graph(month, day):
     #Obtain data from user's desired month and day
     print(tweets.loc[lambda df: df['month'] == 8])
