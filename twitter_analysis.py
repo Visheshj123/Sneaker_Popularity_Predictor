@@ -58,7 +58,8 @@ print ("Number of tweets that mention Python " + str(tweets['nike'].value_counts
 #reformatting  from String to print
 tweets['month'] = tweets['created_at'].map(lambda x: str(x)[4:7])
 tweets['day'] = tweets['created_at'].map(lambda x: str(x)[8:10])
-tweets['time'] = tweets['created_at'].map(lambda x: str(x)[11:16])
+tweets['time'] = tweets['created_at'].map(lambda x: str(x)[11:13])
+print(tweets['time'])
 
 
 
@@ -73,7 +74,7 @@ tweets['month'] = tweets['month'].apply(lambda x: mapper(x))
 tweets['month'] =tweets['month'].astype('int64')
 tweets['day'] =tweets['day'].astype('int64')
 #drops ':' from time
-tweets['time'] = tweets['time'].replace({':':''}, regex=True)
+#tweets['time'] = tweets['time'].replace({':':''}, regex=True)
 tweets['time'] =tweets['time'].astype('int64')
 tweets.drop(['created_at'], axis=1, inplace=True)
 tweets.drop(['text'], axis=1, inplace=True)
@@ -87,30 +88,27 @@ indexnames = tweets[tweets['nike'] == False].index
 tweets.drop(indexnames, inplace=True)
 
 
-#finds the number of True values for each hour of a day of a specific month and puts it into Dataframe
-#tweets.set_index('month', inplace=True)
-#tweets = tweets.groupby(['day']).sum()
 
 #Takes desired month and day from user
 df = pd.DataFrame()
 df = tweets.loc[lambda df: df['month'] == 8]
-df = df.loc[lambda df: df['day'] == 27]
+df = df.loc[lambda df: df['day'] == 26]
+print(df.tail())
 #counts number of repeat instances every minute
 df_count = pd.DataFrame()
 df_count['count'] = df['time'].value_counts()
 df_count.index.name = 'time'
 #df_count.rename( columns={'' :'count'}, inplace=True )
-print(df_count.head())
+#print(df_count.head())
 
 
 
 
 df_count.plot(kind = 'bar')
 plt.savefig('foo.png')
-
-
-
+plt.figure(figsize=(8,10))
 """
+
 
 plt.figure(figsize=(8,5))
 x_data, y_data = (df_count.time.values, df_count["count"].values)
