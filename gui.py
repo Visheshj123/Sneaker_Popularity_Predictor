@@ -3,6 +3,9 @@ from tweepy import OAuthHandler
 from tweepy import Stream
 import twitter_streaming
 from tkinter import *
+import threading
+import subprocess
+
 
 choices = { 'January','February','March','April','May','June','July','August','September','October','November','December'}
 
@@ -32,16 +35,7 @@ popupMenu.grid(row=2, column=1)
 button.grid(row=3, column = 2)
 """
 
+subprocess.call(['python', 'twitter_analysis.py', 'nike'])
+
 
 r.mainloop()
-
-
-
-"""
-def main():
-
-
-
-if __name__ == '__main__':
-    main()
-"""
