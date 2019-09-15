@@ -6,7 +6,10 @@ import numpy as np
 import sys
 
 def main():
-    keyword = str(sys.argv[1:])
+    keyword = ''
+    keyword = str(keyword.join(sys.argv[1:]))
+    #str(sys.argv[1:])
+    print('the keyword is ', keyword)
     #read in the data from the txt file
     tweets_data_path = './twitter_data.txt'
 

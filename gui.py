@@ -21,7 +21,7 @@ button.grid(row=3, column=1)
 Label(r, text='Keyword').grid(row=0)
 e1 = Entry(r)
 e1.grid(row=0, column=1)
-name_of_keyword = e1.get()
+
 
 #desired month and day you want for the data
 tkvar = StringVar(r)
@@ -34,8 +34,22 @@ popupMenu.grid(row=2, column=1)
 """button = Button(r, text='Search', width=25, command=twitter_streaming.stream_data(e1.get()))
 button.grid(row=3, column = 2)
 """
+def get_keyword():
+    keyword = e1.get()
+    return str(keyword)
 
-subprocess.call(['python', 'twitter_analysis.py', 'nike'])
+def launch_analysis():
+    keyword = get_keyword()
+    subprocess.call(['python', 'twitter_analysis.py', keyword])
+
+
+
+#Button to run analysis on keyword
+button = Button(r, text='Analyze', width=25, command=launch_analysis)
+button.grid(row=3, column = 2)
+
+
+#subprocess.call(['python', 'twitter_analysis.py', 'nike'])
 
 
 r.mainloop()
