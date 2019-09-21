@@ -7,7 +7,9 @@ import sys
 
 def main():
     keyword = ''
-    keyword = str(keyword.join(sys.argv[1:]))
+    keyword = str(keyword.join(sys.argv[1]))
+    month = ''
+    month = str(month.join(sys.argv[2]))
     #str(sys.argv[1:])
     print('the keyword is ', keyword)
     #read in the data from the txt file
@@ -61,10 +63,12 @@ def main():
 
 
     #converting month from string to int
-    months_map = {'Aug': 8, 'Sept': 9, 'Oct': 10, 'Dec': 11}
+    months_map = {'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4, 'May': 5, 'Jun': 6, 'Jul': 7,'Aug': 8, 'Sept': 9, 'Oct': 10, 'Dec': 12}
     def mapper(month):
         return months_map[month]
     tweets['month'] = tweets['month'].apply(lambda x: mapper(x))
+    month = mapper(month)
+    print('the value of month is', month)
 
 
     #converts month, day, time to type prints
@@ -91,19 +95,39 @@ def main():
 
     #Takes desired month and day from user
     df = pd.DataFrame()
-    df = tweets.loc[lambda df: df['month'] == 8]
+    df = tweets.loc[lambda df: df['month'] == month]
     df = df.loc[lambda df: df['day'] == 27]
     #counts number of repeat instances every hour
     df_count = pd.DataFrame()
-    df_count['count'] = df['time'].value_counts()
-    df_count.index.name = 'time'
+    df_count1 = pd.DataFrame()
+    df_count2 = pd.DataFrame()
+    #df_count['count'] = df['time'].value_counts()
+
+
+
+    df_count = df.groupby(['month','day','time'])['time'].count().reset_index(name = 'count')
+    df_count1 = df_count[df_count['month'] == month]
+    df_count2 = df_count[df_count['month'] == 9]
+
+
+
+
+
+
+
+
+    #df_count.index.name = 'time'
     #df_count.rename( columns={'' :'count'}, inplace=True )
-    print(df_count.head())
+    #print(df.head())
+    #print(df_count.head())
 
 
 
 
-    df_count.plot(kind = 'bar')
+    df_count1.plot(kind = 'scatter', x='time', y='count')
+    #plt.scatter(df.time, df_count)
+    print(df_count1.tail())
+    print(df_count2.head())
     plt.savefig('foo.png')
 
 

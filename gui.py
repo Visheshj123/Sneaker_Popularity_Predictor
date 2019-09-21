@@ -7,7 +7,7 @@ import threading
 import subprocess
 
 
-choices = { 'January','February','March','April','May','June','July','August','September','October','November','December'}
+choices = { 'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sept','Oct','Nov','Dec'}
 
 r = Tk()
 r.title('Key Word Twitter Search')
@@ -25,7 +25,7 @@ e1.grid(row=0, column=1)
 
 #desired month and day you want for the data
 tkvar = StringVar(r)
-tkvar.set('January')
+tkvar.set('Jan')
 popupMenu = OptionMenu(r, tkvar, *choices)
 popupMenu.grid(row=2, column=1)
 #Use tkvar.get to obtain value
@@ -40,7 +40,7 @@ def get_keyword():
 
 def launch_analysis():
     keyword = get_keyword()
-    subprocess.call(['python', 'twitter_analysis.py', keyword])
+    subprocess.call(['python', 'twitter_analysis.py', keyword, tkvar.get()])
 
 
 
